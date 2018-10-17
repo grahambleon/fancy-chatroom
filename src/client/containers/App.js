@@ -1,24 +1,20 @@
 import React, { Component } from 'react';
+import EntryField from '../components/EntryField'
 
 class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      text: ''
     }
   }
 
   componentDidMount() {
-    fetch('/api/hello')
-    .then(response => response.json())
-    .then(body => this.setState({ text: body.text }));
   }
 
   render() {
     return (
       <React.Fragment>
-        <p>Hello from the client!</p>
-        <p>{this.state.text}</p>
+        <EntryField/>
       </React.Fragment>
     );
   }
