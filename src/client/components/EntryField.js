@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import socketIOClient from 'socket.io-client'
 
 class EntryField extends Component {
   constructor(props){
@@ -8,15 +9,22 @@ class EntryField extends Component {
       input: ''
     }
     this.handleChange = this.handleChange.bind(this)
+    this.send = this.send.bind(this)
   }
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value })
   }
 
+  send() {
+    const socket = socketIOClient(this.state.endpoint)
+
+    socket.emit(this.state)
+  }
+
   render() {
     return (
-      <form>
+      <React.Fragment>
         <span>Username: </span>
         <input
           name='username'
@@ -30,7 +38,8 @@ class EntryField extends Component {
           value={this.state.input}
           onChange={this.handleChange}
         />
-      </form>
+        <button onClick={this.send}>Send</button>
+      </React.Fragment>
     );
   }
 }
