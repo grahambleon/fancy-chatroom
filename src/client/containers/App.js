@@ -1,24 +1,24 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import socketIOClient from 'socket.io-client'
+import EntryField from '../components/EntryField'
 
 class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      text: ''
+      endpoint: "http://192.168.49.185:5000"
     }
   }
 
   componentDidMount() {
-    fetch('/api/hello')
-    .then(response => response.json())
-    .then(body => this.setState({ text: body.text }));
   }
 
   render() {
+    const socket = socketIOClient(this.state.endpoint)
+    
     return (
       <React.Fragment>
-        <p>Hello from the client!</p>
-        <p>{this.state.text}</p>
+        <EntryField/>
       </React.Fragment>
     );
   }
