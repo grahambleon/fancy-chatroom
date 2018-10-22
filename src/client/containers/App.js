@@ -1,19 +1,24 @@
 import React, { Component } from 'react'
-import socketIOClient from 'socket.io-client'
+import io from 'socket.io-client'
 import EntryField from '../components/EntryField'
 
 class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      endpoint: "/",
+      endpoint: 'http://localhost:4001/',
       username: 'Anonymous',
       message: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.send = this.send.bind(this)
-    this.socket = socketIOClient(this.state.endpoint)
+    this.socket = io(this.state.endpoint)
+  }
 
+  componentDidMount() {
+    this.socket.on('message', (payload) => {
+      console.log(`${payload.username}: ${payload.message}`);
+    })
   }
 
   handleChange(event) {
@@ -22,13 +27,12 @@ class App extends Component {
 
   send(event) {
     event.preventDefault()
-    const socket = socketIOClient(this.state.endpoint),
-      payload = {
-        username: this.state.username,
-        message: this.state.message
-      }
 
-    socket.emit('message', payload)
+    const payload = {
+      username: this.state.username,
+      message: this.state.message
+    }
+    this.socket.emit('message', payload)
     this.setState({ message: '' })
   }
 
