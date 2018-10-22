@@ -6,16 +6,27 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      endpoint: "http://192.168.49.185:5000"
+      endpoint: "/",
+      username: 'Anonymous',
+      input: ''
     }
+    this.handleChange = this.handleChange.bind(this)
+    this.send = this.send.bind(this)
   }
 
-  componentDidMount() {
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value })
+  }
+
+  send() {
+    const socket = socketIOClient(this.state.endpoint)
+
+    socket.emit(this.state)
   }
 
   render() {
     const socket = socketIOClient(this.state.endpoint)
-    
+
     return (
       <React.Fragment>
         <EntryField/>
