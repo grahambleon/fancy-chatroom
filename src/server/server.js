@@ -1,16 +1,28 @@
-const express = require('express');
-const http = require('http');
-const io = require('socket.io')(http);
 
-const app = express();
-const port = process.env.PORT || 5000;
+const express = require('express')
+const http = require('http')
+const socketIO = require('socket.io')
 
-io.on('connection', (socket) => {
-  console.log('a user has connected')
+const port = 4001
+
+const app = express()
+
+const server = http.createServer(app)
+
+const io = socketIO(server)
+
+io.on('connection', socket => {
+  console.log('New client connected')
+
+  socket.on('message', (payload) => {
+    console.log(payload);
+    socket.emit('message', payload)
+  })
+
 
   socket.on('disconnect', () => {
     console.log('user disconnected')
   })
 })
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+server.listen(port, () => console.log(`Listening on port ${port}`))
