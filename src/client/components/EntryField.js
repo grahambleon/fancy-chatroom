@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
-import socketIOClient from 'socket.io-client'
 
 class EntryField extends Component {
   render() {
     return (
-      <React.Fragment>
+      <form onSubmit={this.props.send}>
         <span>Username: </span>
         <input
           name='username'
           type='text'
           value={this.props.username}
-          onChange={this.handleChange}
+          onChange={this.props.handleChange}
         /><br/>
         <input
-          name='input'
+          name='message'
           type='text'
-          value={this.props.input}
-          onChange={this.handleChange}
+          value={this.props.message}
+          onChange={this.props.handleChange}
         />
-        <button onClick={this.props.send}>Send</button>
-      </React.Fragment>
+        <button>Send</button>
+      </form>
     );
   }
 }

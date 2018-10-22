@@ -8,28 +8,39 @@ class App extends Component {
     this.state = {
       endpoint: "/",
       username: 'Anonymous',
-      input: ''
+      message: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.send = this.send.bind(this)
+    this.socket = socketIOClient(this.state.endpoint)
+
   }
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value })
   }
 
-  send() {
-    const socket = socketIOClient(this.state.endpoint)
+  send(event) {
+    event.preventDefault()
+    const socket = socketIOClient(this.state.endpoint),
+      payload = {
+        username: this.state.username,
+        message: this.state.message
+      }
 
-    socket.emit(this.state)
+    socket.emit('message', payload)
+    this.setState({ message: '' })
   }
 
   render() {
-    const socket = socketIOClient(this.state.endpoint)
-
     return (
       <React.Fragment>
-        <EntryField/>
+        <EntryField
+          handleChange={this.handleChange}
+          send={this.send}
+          username={this.state.username}
+          message={this.state.message}
+        />
       </React.Fragment>
     );
   }
