@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import io from 'socket.io-client'
 import EntryField from '../components/EntryField'
+import ChatBox from '../components/ChatBox'
 
 class App extends Component {
   constructor(props){
@@ -39,6 +40,7 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
+        <ChatBox />
         <EntryField
           handleChange={this.handleChange}
           send={this.send}
