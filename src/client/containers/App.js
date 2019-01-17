@@ -8,6 +8,7 @@ class App extends Component {
     super(props)
     this.state = {
       endpoint: 'http://localhost:4001/',
+      chat: [],
       username: 'Anonymous',
       message: ''
     }
@@ -18,7 +19,7 @@ class App extends Component {
 
   componentDidMount() {
     this.socket.on('message', (payload) => {
-      console.log(`${payload.username}: ${payload.message}`);
+      this.setState({ chat: this.state.chat.concat(payload) });
     })
   }
 
@@ -31,7 +32,8 @@ class App extends Component {
 
     const payload = {
       username: this.state.username,
-      message: this.state.message
+      message: this.state.message,
+      id: `${Date.now()}${this.state.username}`
     }
     this.socket.emit('message', payload)
     this.setState({ message: '' })
@@ -40,7 +42,7 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <ChatBox />
+        <ChatBox chat={this.state.chat}/>
         <EntryField
           handleChange={this.handleChange}
           send={this.send}

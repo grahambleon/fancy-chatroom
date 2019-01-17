@@ -1,10 +1,16 @@
-import React from 'react';
+import React from 'react'
 
 const ChatBox = (props) => {
-  return (
-    <React.Fragment>
+  let messages = props.chat.map(message => {
+    return(
+      <li key={message.id}>{message.username}: {message.message}</li>
+    )
+  })
 
-    </React.Fragment>
+  return (
+    <ul>
+      {messages}
+    </ul>
   )
 }
 
