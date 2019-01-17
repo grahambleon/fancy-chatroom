@@ -14,11 +14,15 @@ const io = socketIO(server)
 io.on('connection', socket => {
   console.log('New client connected')
 
-  socket.on('message', (payload) => {
+  socket.on('message', payload => {
     console.log(payload);
     io.emit('message', payload)
   })
 
+  socket.on('namechange', payload => {
+    console.log(payload);
+    io.emit('namechange', payload)
+  })
 
   socket.on('disconnect', () => {
     console.log('user disconnected')

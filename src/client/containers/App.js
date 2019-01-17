@@ -10,16 +10,36 @@ class App extends Component {
       endpoint: 'http://localhost:4001/',
       chat: [],
       username: 'Anonymous',
+      usernameField: 'Anonymous',
       message: ''
     }
+    this.changeUsername = this.changeUsername.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.send = this.send.bind(this)
     this.socket = io(this.state.endpoint)
   }
 
+  changeUsername() {
+    const payload = {
+      newName: this.state.usernameField,
+      oldName: this.state.username,
+      id: `${Date.now()}${this.state.username}`
+    }
+    this.socket.emit('namechange', payload)
+    this.setState({ username: this.state.usernameField })
+  }
+
   componentDidMount() {
-    this.socket.on('message', (payload) => {
-      this.setState({ chat: this.state.chat.concat(payload) });
+    this.socket.on('message', payload => {
+      this.setState({ chat: this.state.chat.concat(
+        <li key={payload.id}>{payload.username}: {payload.message}</li>
+      )})
+    })
+
+    this.socket.on('namechange', payload => {
+      this.setState({ chat: this.state.chat.concat(
+        <li key={payload.id}>{payload.oldName} has changed their name to {payload.newName}</li>
+      )})
     })
   }
 
@@ -46,7 +66,8 @@ class App extends Component {
         <EntryField
           handleChange={this.handleChange}
           send={this.send}
-          username={this.state.username}
+          username={this.state.usernameField}
+          changeUsername={this.changeUsername}
           message={this.state.message}
         />
       </React.Fragment>

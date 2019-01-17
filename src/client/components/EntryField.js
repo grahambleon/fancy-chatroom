@@ -5,11 +5,11 @@ const EntryField = (props) => {
     <form onSubmit={props.send}>
       <label>Username: </label>
       <input
-        name='username'
+        name='usernameField'
         type='text'
         value={props.username}
         onChange={props.handleChange}
-      /><button type='button'>Change Name</button><br/>
+      /><button type='button' onClick={props.changeUsername}>Change Name</button><br/>
       <label>Message: </label>
       <input
         name='message'
